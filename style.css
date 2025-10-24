@@ -22,6 +22,7 @@ body {
   transition: opacity 0.9s ease;
 }
 
+/* ---------- Menus ---------- */
 .menu { position: fixed; z-index: 40; pointer-events: none; }
 .left-menu { left: 40px; bottom: 36px; width: 230px; }
 .right-menu { right: 40px; bottom: 36px; width: 260px; text-align: right; }
@@ -82,6 +83,7 @@ body {
   transition: opacity 1.5s ease;
 }
 
+/* ---------- Poem ---------- */
 .poem-wrap {
   position: fixed;
   top: 18%;
@@ -116,7 +118,7 @@ body {
   transition: transform 2.6s cubic-bezier(.22,.68,.11,1), opacity 2.4s ease, color 2.4s ease;
 }
 
-/* ---------- Archive Styles ---------- */
+/* ---------- Archive Images ---------- */
 .archive-wrap {
   position: fixed;
   top: 50%;
@@ -125,43 +127,38 @@ body {
   max-width: 1200px;
   transform: translate(-50%, -50%);
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
   gap: 26px;
-  overflow: visible;
+  overflow-x: auto;
+  overflow-y: hidden;
   pointer-events: none;
+  -webkit-overflow-scrolling: touch;
 }
+.archive-wrap::-webkit-scrollbar { display: none; }
 
 .archive-item {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   opacity: 0;
   transform: translateY(-100vh);
   transition: transform 1.8s cubic-bezier(.22,.68,.11,1), opacity 1.8s ease;
   cursor: pointer;
   pointer-events: auto;
-  overflow: hidden;
-  border-radius: 2px;
 }
-.archive-item.small { max-width: 240px; }
-.archive-item.medium { max-width: 340px; }
-.archive-item.large { max-width: 460px; }
-
 .archive-item img {
   display: block;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
+  width: auto;
+  height: 320px; /* maximum height to keep visible on mobile */
+  object-fit: contain;
   transition: transform 0.6s ease;
 }
-.archive-item:hover img {
-  transform: scale(1.05);
-}
+.archive-item:hover img { transform: scale(1.05); }
 
+/* ---------- Responsive Mobile ---------- */
 @media(max-width:700px){
-  .left-menu{left:18px;bottom:18px;width:180px;}
-  .poem-wrap{width:320px;}
-  .poem-word{font-size:11px;margin-right:10px;}
-  .archive-item.small, .archive-item.medium, .archive-item.large {
-    max-width: 160px;
-  }
+  .left-menu{left:16px; top:16px; bottom:auto; width:140px;}
+  .right-menu{right:16px; top:16px; bottom:auto; width:140px;}
+  .poem-wrap{width:260px; top:30%;}
+  .poem-word{font-size:11px;margin-right:8px;}
+  .archive-wrap{top:50%; width:95%; gap:16px;}
+  .archive-item img{height:220px;}
 }

@@ -150,53 +150,11 @@ Like how i desire you.`;
   }
 
   /* ---------- Other Sections ---------- */
-  function showLocation() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("Netherlands, Delft. 10/21/2025.");
-    setTimeout(() => (isPlaying = false), 4500);
-  }
-
-  function showSoundtrack() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("Yves Tumor — Limerence", 7000);
-    audio.currentTime = 0;
-    audio.volume = 0;
-    const playPromise = audio.play();
-    if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
-    fadeAudio(0, 1, 1500);
-    setTimeout(() => {
-      fadeAudio(1, 0, 1500);
-      setTimeout(() => { try { audio.pause(); } catch (e) {} isPlaying = false; }, 1500);
-    }, 7000);
-  }
-
-  function showInspiration() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("My inspiration is hedi slimane.");
-    setTimeout(() => (isPlaying = false), 4500);
-  }
-
-  function showGraphic() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("Working on it.");
-    setTimeout(() => (isPlaying = false), 4500);
-  }
-
-  function showZine() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("Made by me. Inspired by Dior Homme 2005 Winter.");
-    setTimeout(() => (isPlaying = false), 4500);
-  }
+  function showLocation() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Netherlands, Delft. 10/21/2025."); setTimeout(()=>isPlaying=false,4500);}
+  function showSoundtrack() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Yves Tumor — Limerence",7000); audio.currentTime=0; audio.volume=0; const playPromise=audio.play(); if(playPromise&&typeof playPromise.catch==="function") playPromise.catch(()=>{}); fadeAudio(0,1,1500); setTimeout(()=>{ fadeAudio(1,0,1500); setTimeout(()=>{try{audio.pause();}catch(e){} isPlaying=false; },1500);},7000);}
+  function showInspiration() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("My inspiration is hedi slimane."); setTimeout(()=>isPlaying=false,4500);}
+  function showGraphic() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Working on it."); setTimeout(()=>isPlaying=false,4500);}
+  function showZine() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Made by me. Inspired by Dior Homme 2005 Winter."); setTimeout(()=>isPlaying=false,4500);}
 
   /* ---------- Archives ---------- */
   const archiveImages = [
@@ -208,69 +166,27 @@ Like how i desire you.`;
   ];
 
   function showArchives() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    poemContainer.innerHTML = "";
-    archiveContainer.innerHTML = "";
-
-    archiveImages.forEach((src, i) => {
-      const div = document.createElement("div");
-      div.classList.add("archive-item");
-      const sizes = ["small", "medium", "large"];
-      div.classList.add(sizes[Math.floor(Math.random() * sizes.length)]);
-
-      const img = document.createElement("img");
-      img.src = src;
-      div.appendChild(img);
-      archiveContainer.appendChild(div);
-
-      setTimeout(() => {
-        div.style.opacity = "1";
-        div.style.transform = "translateY(0)";
-      }, i * 200);
+    if(isPlaying)return; isPlaying=true;
+    clearTextCenter(); poemContainer.innerHTML=""; archiveContainer.innerHTML="";
+    archiveImages.forEach((src,i)=>{
+      const div=document.createElement("div"); div.classList.add("archive-item");
+      const sizes=["small","medium","large"]; div.classList.add(sizes[Math.floor(Math.random()*sizes.length)]);
+      const img=document.createElement("img"); img.src=src; div.appendChild(img); archiveContainer.appendChild(div);
+      setTimeout(()=>{ div.style.opacity="1"; div.style.transform="translateY(0)"; }, i*200);
     });
-
-    setTimeout(() => { isPlaying = false; }, archiveImages.length * 200 + 1000);
+    setTimeout(()=>isPlaying=false, archiveImages.length*200+1000);
   }
 
   /* ---------- Menu ---------- */
-  function toggleSubmenuFor(targetMenuItem) {
-    leftItems.forEach((li) => { if (li !== targetMenuItem) li.classList.remove("active"); });
-    targetMenuItem.classList.toggle("active");
-  }
+  function toggleSubmenuFor(targetMenuItem){ leftItems.forEach((li)=>{if(li!==targetMenuItem) li.classList.remove("active");}); targetMenuItem.classList.toggle("active"); }
 
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest("#leftMenu")) leftItems.forEach((li) => li.classList.remove("active"));
-  });
+  document.addEventListener("click",(e)=>{ if(!e.target.closest("#leftMenu")) leftItems.forEach((li)=>li.classList.remove("active")); });
 
-  leftMenu.addEventListener("click", (e) => {
-    const menuItemOrSub = e.target.closest(".menu-item, .submenu-item");
-    if (!menuItemOrSub) return;
-    e.stopPropagation();
-
-    if (menuItemOrSub.classList.contains("menu-item") && menuItemOrSub.dataset.target === "winter2005") {
-      toggleSubmenuFor(menuItemOrSub);
-      return;
-    }
-
-    const data = menuItemOrSub.dataset.target;
-    if (!data) return;
-    if (isPlaying) return;
-
-    leftItems.forEach((li) => li.classList.remove("active"));
-    clearTextCenter();
-    poemContainer.innerHTML = "";
-    archiveContainer.innerHTML = "";
-
-    switch (data) {
-      case "poem": animatePoem(); break;
-      case "locations": showLocation(); break;
-      case "soundtracks": showSoundtrack(); break;
-      case "inspiration": showInspiration(); break;
-      case "graphic": showGraphic(); break;
-      case "archives": showArchives(); break;
-      case "zine": showZine(); break;
-    }
+  leftMenu.addEventListener("click",(e)=>{
+    const menuItemOrSub=e.target.closest(".menu-item,.submenu-item"); if(!menuItemOrSub) return; e.stopPropagation();
+    if(menuItemOrSub.classList.contains("menu-item") && menuItemOrSub.dataset.target==="winter2005"){ toggleSubmenuFor(menuItemOrSub); return; }
+    const data=menuItemOrSub.dataset.target; if(!data) return; if(isPlaying)return;
+    leftItems.forEach((li)=>li.classList.remove("active")); clearTextCenter(); poemContainer.innerHTML=""; archiveContainer.innerHTML="";
+    switch(data){ case"poem": animatePoem(); break; case"locations": showLocation(); break; case"soundtracks": showSoundtrack(); break; case"inspiration": showInspiration(); break; case"graphic": showGraphic(); break; case"archives": showArchives(); break; case"zine": showZine(); break; }
   });
 });
