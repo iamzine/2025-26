@@ -7,11 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const rightItems = Array.from(rightMenu.querySelectorAll(".menu-item"));
   const poemContainer = document.getElementById("poemContainer");
   const textCenter = document.getElementById("textCenter");
+  const archiveContainer = document.getElementById("archiveContainer");
   const audio = document.getElementById("soundtrackAudio");
 
   let isPlaying = false;
   let timeouts = [];
 
+  /* ---------- Intro ---------- */
   function openSite() {
     enterText.style.opacity = "0";
     setTimeout(() => {
@@ -24,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }, 700);
   }
-
   introScreen.addEventListener("click", openSite);
   introScreen.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -33,12 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  /* ---------- Text Center ---------- */
   function clearTextCenter() {
     textCenter.style.opacity = 0;
     timeouts.forEach(clearTimeout);
     timeouts = [];
   }
-
   function showTextCenter(text, duration = 4500) {
     clearTextCenter();
     textCenter.textContent = text;
@@ -49,12 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
     timeouts.push(t);
   }
 
+  /* ---------- Audio Fade ---------- */
   function fadeAudio(volumeStart, volumeEnd, duration) {
     const stepTime = 50;
     const steps = Math.max(1, Math.round(duration / stepTime));
     let currentStep = 0;
     const volumeStep = (volumeEnd - volumeStart) / steps;
-
     const fade = setInterval(() => {
       currentStep++;
       audio.volume = Math.min(1, Math.max(0, volumeStart + volumeStep * currentStep));
@@ -62,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, stepTime);
   }
 
+  /* ---------- Poem ---------- */
   const poemText = `
 I dont know what's wrong between us.
 But everyday feels like a ticking time bomb.
@@ -144,10 +146,10 @@ Like how i desire you.`;
       const delay = words.length * 220 + 1200;
       setTimeout(() => showLine(i + 1), delay);
     }
-
     showLine(0);
   }
 
+  /* ---------- Other Sections ---------- */
   function showLocation() {
     if (isPlaying) return;
     isPlaying = true;
@@ -160,14 +162,12 @@ Like how i desire you.`;
     if (isPlaying) return;
     isPlaying = true;
     clearTextCenter();
-
     showTextCenter("Yves Tumor — Limerence", 7000);
     audio.currentTime = 0;
     audio.volume = 0;
     const playPromise = audio.play();
     if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
     fadeAudio(0, 1, 1500);
-
     setTimeout(() => {
       fadeAudio(1, 0, 1500);
       setTimeout(() => { try { audio.pause(); } catch (e) {} isPlaying = false; }, 1500);
@@ -190,14 +190,6 @@ Like how i desire you.`;
     setTimeout(() => (isPlaying = false), 4500);
   }
 
-  function showArchives() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("Working on it.");
-    setTimeout(() => (isPlaying = false), 4500);
-  }
-
   function showZine() {
     if (isPlaying) return;
     isPlaying = true;
@@ -206,6 +198,43 @@ Like how i desire you.`;
     setTimeout(() => (isPlaying = false), 4500);
   }
 
+  /* ---------- Archives ---------- */
+  const archiveImages = [
+    "images/rick owens furniture.jpg",
+    "images/rick owens furniture 2.jpg",
+    "images/rick owens exhibition.jpg",
+    "images/rick owens exhibition 2.jpg",
+    "images/maison margiela exhibition.jpg"
+  ];
+
+  function showArchives() {
+    if (isPlaying) return;
+    isPlaying = true;
+    clearTextCenter();
+    poemContainer.innerHTML = "";
+    archiveContainer.innerHTML = "";
+
+    archiveImages.forEach((src, i) => {
+      const div = document.createElement("div");
+      div.classList.add("archive-item");
+      const sizes = ["small", "medium", "large"];
+      div.classList.add(sizes[Math.floor(Math.random() * sizes.length)]);
+
+      const img = document.createElement("img");
+      img.src = src;
+      div.appendChild(img);
+      archiveContainer.appendChild(div);
+
+      setTimeout(() => {
+        div.style.opacity = "1";
+        div.style.transform = "translateY(0)";
+      }, i * 200);
+    });
+
+    setTimeout(() => { isPlaying = false; }, archiveImages.length * 200 + 1000);
+  }
+
+  /* ---------- Menu ---------- */
   function toggleSubmenuFor(targetMenuItem) {
     leftItems.forEach((li) => { if (li !== targetMenuItem) li.classList.remove("active"); });
     targetMenuItem.classList.toggle("active");
@@ -232,6 +261,7 @@ Like how i desire you.`;
     leftItems.forEach((li) => li.classList.remove("active"));
     clearTextCenter();
     poemContainer.innerHTML = "";
+    archiveContainer.innerHTML = "";
 
     switch (data) {
       case "poem": animatePoem(); break;
