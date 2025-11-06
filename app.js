@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let isPlaying = false;
   let timeouts = [];
 
-  /* ---------- Intro ---------- */
   function openSite() {
     enterText.style.opacity = "0";
     setTimeout(() => {
@@ -34,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------- Text Center ---------- */
+
   function clearTextCenter() {
     textCenter.style.opacity = 0;
     timeouts.forEach(clearTimeout);
@@ -50,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     timeouts.push(t);
   }
 
-  /* ---------- Audio Fade ---------- */
+
   function fadeAudio(volumeStart, volumeEnd, duration) {
     const stepTime = 50;
     const steps = Math.max(1, Math.round(duration / stepTime));
@@ -63,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, stepTime);
   }
 
-  /* ---------- Poem ---------- */
+
   const poemText = `
 I dont know what's wrong between us.
 But everyday feels like a ticking time bomb.
@@ -149,14 +148,55 @@ Like how i desire you.`;
     showLine(0);
   }
 
-  /* ---------- Other Sections ---------- */
-  function showLocation() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Netherlands, Delft. 10/21/2025."); setTimeout(()=>isPlaying=false,4500);}
-  function showSoundtrack() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Yves Tumor — Limerence",7000); audio.currentTime=0; audio.volume=0; const playPromise=audio.play(); if(playPromise&&typeof playPromise.catch==="function") playPromise.catch(()=>{}); fadeAudio(0,1,1500); setTimeout(()=>{ fadeAudio(1,0,1500); setTimeout(()=>{try{audio.pause();}catch(e){} isPlaying=false; },1500);},7000);}
-  function showInspiration() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("My inspiration is hedi slimane."); setTimeout(()=>isPlaying=false,4500);}
-  function showGraphic() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Working on it."); setTimeout(()=>isPlaying=false,4500);}
-  function showZine() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Made by me. Inspired by Dior Homme 2005 Winter."); setTimeout(()=>isPlaying=false,4500);}
+  function showLocation() {
+    if (isPlaying) return;
+    isPlaying = true;
+    clearTextCenter();
+    showTextCenter("Netherlands, Delft. 10/21/2025.");
+    setTimeout(() => (isPlaying = false), 4500);
+  }
 
-  /* ---------- Archives ---------- */
+  function showSoundtrack() {
+    if (isPlaying) return;
+    isPlaying = true;
+    clearTextCenter();
+    showTextCenter("Yves Tumor — Limerence", 7000);
+    audio.currentTime = 0;
+    audio.volume = 0;
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
+    fadeAudio(0, 1, 1500);
+    setTimeout(() => {
+      fadeAudio(1, 0, 1500);
+      setTimeout(() => { try { audio.pause(); } catch (e) {} isPlaying = false; }, 1500);
+    }, 7000);
+  }
+
+  function showInspiration() {
+    if (isPlaying) return;
+    isPlaying = true;
+    clearTextCenter();
+    showTextCenter("My inspiration is y̶̤̳͈̬̺͉̪̓̀̔̆ò̵̡̳̟̰̩̦͔͖͕͉̫̼͓͇̭̑̂̈̃̎̀̽̿̓̄̃͊̈͋̊̄͂͐̕ŭ̴̧͔̥̙͕̼̬̪͖͍̲.");
+    setTimeout(() => (isPlaying = false), 4500);
+  }
+
+  function showGraphic() {
+    if (isPlaying) return;
+    isPlaying = true;
+    clearTextCenter();
+    showTextCenter("Working on it.");
+    setTimeout(() => (isPlaying = false), 4500);
+  }
+
+  function showZine() {
+    if (isPlaying) return;
+    isPlaying = true;
+    clearTextCenter();
+    showTextCenter("Made by me. For you.");
+    setTimeout(() => (isPlaying = false), 4500);
+  }
+
+
   const archiveImages = [
     "images/rick owens furniture.jpg",
     "images/rick owens furniture 2.jpg",
@@ -166,27 +206,146 @@ Like how i desire you.`;
   ];
 
   function showArchives() {
-    if(isPlaying)return; isPlaying=true;
-    clearTextCenter(); poemContainer.innerHTML=""; archiveContainer.innerHTML="";
-    archiveImages.forEach((src,i)=>{
-      const div=document.createElement("div"); div.classList.add("archive-item");
-      const sizes=["small","medium","large"]; div.classList.add(sizes[Math.floor(Math.random()*sizes.length)]);
-      const img=document.createElement("img"); img.src=src; div.appendChild(img); archiveContainer.appendChild(div);
-      setTimeout(()=>{ div.style.opacity="1"; div.style.transform="translateY(0)"; }, i*200);
+    if (isPlaying) return;
+    isPlaying = true;
+    clearTextCenter();
+    poemContainer.innerHTML = "";
+    archiveContainer.innerHTML = "";
+
+    archiveImages.forEach((src, i) => {
+      const div = document.createElement("div");
+      div.classList.add("archive-item");
+      const sizes = ["small", "medium", "large"];
+      div.classList.add(sizes[Math.floor(Math.random() * sizes.length)]);
+
+      const img = document.createElement("img");
+      img.src = src;
+      div.appendChild(img);
+      archiveContainer.appendChild(div);
+
+      setTimeout(() => {
+        div.style.opacity = "1";
+        div.style.transform = "translateY(0)";
+      }, i * 200);
     });
-    setTimeout(()=>isPlaying=false, archiveImages.length*200+1000);
+
+    setTimeout(() => { isPlaying = false; }, archiveImages.length * 200 + 1000);
   }
 
-  /* ---------- Menu ---------- */
-  function toggleSubmenuFor(targetMenuItem){ leftItems.forEach((li)=>{if(li!==targetMenuItem) li.classList.remove("active");}); targetMenuItem.classList.toggle("active"); }
 
-  document.addEventListener("click",(e)=>{ if(!e.target.closest("#leftMenu")) leftItems.forEach((li)=>li.classList.remove("active")); });
+  function toggleSubmenuFor(targetMenuItem) {
+    leftItems.forEach((li) => { if (li !== targetMenuItem) li.classList.remove("active"); });
+    targetMenuItem.classList.toggle("active");
+  }
 
-  leftMenu.addEventListener("click",(e)=>{
-    const menuItemOrSub=e.target.closest(".menu-item,.submenu-item"); if(!menuItemOrSub) return; e.stopPropagation();
-    if(menuItemOrSub.classList.contains("menu-item") && menuItemOrSub.dataset.target==="winter2005"){ toggleSubmenuFor(menuItemOrSub); return; }
-    const data=menuItemOrSub.dataset.target; if(!data) return; if(isPlaying)return;
-    leftItems.forEach((li)=>li.classList.remove("active")); clearTextCenter(); poemContainer.innerHTML=""; archiveContainer.innerHTML="";
-    switch(data){ case"poem": animatePoem(); break; case"locations": showLocation(); break; case"soundtracks": showSoundtrack(); break; case"inspiration": showInspiration(); break; case"graphic": showGraphic(); break; case"archives": showArchives(); break; case"zine": showZine(); break; }
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#leftMenu")) leftItems.forEach((li) => li.classList.remove("active"));
   });
+
+  leftMenu.addEventListener("click", (e) => {
+    const menuItemOrSub = e.target.closest(".menu-item, .submenu-item");
+    if (!menuItemOrSub) return;
+    e.stopPropagation();
+
+    if (menuItemOrSub.classList.contains("menu-item") && menuItemOrSub.dataset.target === "winter2005") {
+      toggleSubmenuFor(menuItemOrSub);
+      return;
+    }
+
+    const data = menuItemOrSub.dataset.target;
+    if (!data) return;
+    if (isPlaying) return;
+
+    leftItems.forEach((li) => li.classList.remove("active"));
+    clearTextCenter();
+    poemContainer.innerHTML = "";
+    archiveContainer.innerHTML = "";
+
+    switch (data) {
+      case "poem": animatePoem(); break;
+      case "locations": showLocation(); break;
+      case "soundtracks": showSoundtrack(); break;
+      case "inspiration": showInspiration(); break;
+      case "graphic": showGraphic(); break;
+      case "archives": showArchives(); break;
+      case "zine": showZine(); break;
+    }
+  });
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const introScreen = document.getElementById('introScreen');
+  const menuItems = document.querySelectorAll('.menu-item');
+  const musicPlayer = document.getElementById('musicPlayer');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const trackTitle = document.getElementById('trackTitle');
+
+  const tracks = [
+    { el: document.getElementById('track1'), title: 'Remina – Omori' }
+  ];
+  let currentTrackIndex = 0;
+  let fadeInterval = null;
+
+  const getCurrentTrack = () => tracks[currentTrackIndex].el;
+
+
+  function openSite() {
+    document.querySelector('.enter-text').style.opacity = 0;
+    setTimeout(() => {
+      introScreen.style.display = 'none';
+      menuItems.forEach((item, i) => setTimeout(() => item.classList.add('visible'), i * 100));
+    }, 700);
+
+    setTimeout(() => musicPlayer.classList.add('visible'), 900);
+  }
+  introScreen.addEventListener('click', openSite);
+  introScreen.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') openSite(); });
+
+ 
+  function fadeIn(audio, duration = 2000) {
+    clearInterval(fadeInterval);
+    audio.pause();
+    audio.currentTime = 0;
+    audio.volume = 0;
+    const stepTime = 50;
+    const steps = duration / stepTime;
+    let currentStep = 0;
+    audio.play().catch(() => {});
+    fadeInterval = setInterval(() => {
+      currentStep++;
+      audio.volume = Math.min(1, currentStep / steps);
+      if (currentStep >= steps) clearInterval(fadeInterval);
+    }, stepTime);
+  }
+
+  function fadeOut(audio, duration = 1500) {
+    clearInterval(fadeInterval);
+    const stepTime = 50;
+    const steps = duration / stepTime;
+    let currentStep = 0;
+    const startVolume = audio.volume;
+    fadeInterval = setInterval(() => {
+      currentStep++;
+      audio.volume = Math.max(0, startVolume * (1 - currentStep / steps));
+      if (currentStep >= steps) { audio.pause(); audio.volume = 1; clearInterval(fadeInterval); }
+    }, stepTime);
+  }
+
+  playPauseBtn.addEventListener('click', () => {
+    const track = getCurrentTrack();
+    if (track.paused) {
+      fadeIn(track);
+      playPauseBtn.textContent = 'pause';
+      trackTitle.textContent = 'now playing: ' + tracks[currentTrackIndex].title;
+    } else {
+      fadeOut(track);
+      playPauseBtn.textContent = 'play';
+    }
+  });
+
+  nextBtn.addEventListener('click', () => fadeIn(getCurrentTrack()));
+  prevBtn.addEventListener('click', () => fadeIn(getCurrentTrack()));
 });
