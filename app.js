@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let isPlaying = false;
   let timeouts = [];
 
+  /* ---------- Intro ---------- */
   function openSite() {
     enterText.style.opacity = "0";
     setTimeout(() => {
@@ -33,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-
+  /* ---------- Text Center ---------- */
   function clearTextCenter() {
     textCenter.style.opacity = 0;
     timeouts.forEach(clearTimeout);
@@ -49,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     timeouts.push(t);
   }
 
-
+  /* ---------- Audio Fade ---------- */
   function fadeAudio(volumeStart, volumeEnd, duration) {
     const stepTime = 50;
     const steps = Math.max(1, Math.round(duration / stepTime));
@@ -62,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, stepTime);
   }
 
-
+  /* ---------- Poem ---------- */
   const poemText = `
 I dont know what's wrong between us.
 But everyday feels like a ticking time bomb.
@@ -148,131 +149,63 @@ Like how i desire you.`;
     showLine(0);
   }
 
-  function showLocation() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("Netherlands, Delft. 10/21/2025.");
-    setTimeout(() => (isPlaying = false), 4500);
-  }
+  /* ---------- Other Sections ---------- */
+  function showLocation() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Netherlands, Delft. 10/21/2025."); setTimeout(()=>isPlaying=false,4500);}
+  function showSoundtrack() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Remina — Omori",7000); audio.currentTime=0; audio.volume=0; const playPromise=audio.play(); if(playPromise&&typeof playPromise.catch==="function") playPromise.catch(()=>{}); fadeAudio(0,1,1500); setTimeout(()=>{ fadeAudio(1,0,1500); setTimeout(()=>{try{audio.pause();}catch(e){} isPlaying=false; },1500);},7000);}
+  function showInspiration() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("My inspiration is hedi slimane."); setTimeout(()=>isPlaying=false,4500);}
+  function showGraphic() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Working on it."); setTimeout(()=>isPlaying=false,4500);}
+  function showZine() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Made by me. Inspired by Dior Homme 2005 Winter."); setTimeout(()=>isPlaying=false,4500);}
 
-  function showSoundtrack() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("Yves Tumor — Limerence", 7000);
-    audio.currentTime = 0;
-    audio.volume = 0;
-    const playPromise = audio.play();
-    if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
-    fadeAudio(0, 1, 1500);
+  /* ---------- Archives ---------- */
+/* ---------- Archives ---------- */
+const archiveImages = [
+  "images/rick owens furniture.jpg",
+  "images/rick owens furniture 2.jpg",
+  "images/rick owens exhibition.jpg",
+  "images/rick owens exhibition 2.jpg",
+  "images/maison margiela exhibition.jpg"
+];
+
+function showArchives() {
+  if(isPlaying) return;
+  isPlaying = true;
+  clearTextCenter();
+  poemContainer.innerHTML = "";
+  archiveContainer.innerHTML = "";
+
+  archiveImages.forEach((src, i) => {
+    const div = document.createElement("div");
+    div.classList.add("archive-item");
+    const img = document.createElement("img");
+    img.src = src;
+    div.appendChild(img);
+    archiveContainer.appendChild(div);
+
     setTimeout(() => {
-      fadeAudio(1, 0, 1500);
-      setTimeout(() => { try { audio.pause(); } catch (e) {} isPlaying = false; }, 1500);
-    }, 7000);
-  }
-
-  function showInspiration() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("My inspiration is y̶̤̳͈̬̺͉̪̓̀̔̆ò̵̡̳̟̰̩̦͔͖͕͉̫̼͓͇̭̑̂̈̃̎̀̽̿̓̄̃͊̈͋̊̄͂͐̕ŭ̴̧͔̥̙͕̼̬̪͖͍̲.");
-    setTimeout(() => (isPlaying = false), 4500);
-  }
-
-  function showGraphic() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("Working on it.");
-    setTimeout(() => (isPlaying = false), 4500);
-  }
-
-  function showZine() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    showTextCenter("Made by me. For you.");
-    setTimeout(() => (isPlaying = false), 4500);
-  }
-
-
-  const archiveImages = [
-    "images/rick owens furniture.jpg",
-    "images/rick owens furniture 2.jpg",
-    "images/rick owens exhibition.jpg",
-    "images/rick owens exhibition 2.jpg",
-    "images/maison margiela exhibition.jpg"
-  ];
-
-  function showArchives() {
-    if (isPlaying) return;
-    isPlaying = true;
-    clearTextCenter();
-    poemContainer.innerHTML = "";
-    archiveContainer.innerHTML = "";
-
-    archiveImages.forEach((src, i) => {
-      const div = document.createElement("div");
-      div.classList.add("archive-item");
-      const sizes = ["small", "medium", "large"];
-      div.classList.add(sizes[Math.floor(Math.random() * sizes.length)]);
-
-      const img = document.createElement("img");
-      img.src = src;
-      div.appendChild(img);
-      archiveContainer.appendChild(div);
-
-      setTimeout(() => {
-        div.style.opacity = "1";
-        div.style.transform = "translateY(0)";
-      }, i * 200);
-    });
-
-    setTimeout(() => { isPlaying = false; }, archiveImages.length * 200 + 1000);
-  }
-
-
-  function toggleSubmenuFor(targetMenuItem) {
-    leftItems.forEach((li) => { if (li !== targetMenuItem) li.classList.remove("active"); });
-    targetMenuItem.classList.toggle("active");
-  }
-
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest("#leftMenu")) leftItems.forEach((li) => li.classList.remove("active"));
+      div.style.opacity = "1";
+      div.style.transform = "translateY(0)";
+    }, i * 200);
   });
 
-  leftMenu.addEventListener("click", (e) => {
-    const menuItemOrSub = e.target.closest(".menu-item, .submenu-item");
-    if (!menuItemOrSub) return;
-    e.stopPropagation();
+  // Reset isPlaying after last animation
+  const totalTime = archiveImages.length * 200 + 1000;
+  setTimeout(() => isPlaying = false, totalTime);
+}
 
-    if (menuItemOrSub.classList.contains("menu-item") && menuItemOrSub.dataset.target === "winter2005") {
-      toggleSubmenuFor(menuItemOrSub);
-      return;
-    }
 
-    const data = menuItemOrSub.dataset.target;
-    if (!data) return;
-    if (isPlaying) return;
+  /* ---------- Menu ---------- */
+  function toggleSubmenuFor(targetMenuItem){ leftItems.forEach((li)=>{if(li!==targetMenuItem) li.classList.remove("active");}); targetMenuItem.classList.toggle("active"); }
 
-    leftItems.forEach((li) => li.classList.remove("active"));
-    clearTextCenter();
-    poemContainer.innerHTML = "";
-    archiveContainer.innerHTML = "";
+  document.addEventListener("click",(e)=>{ if(!e.target.closest("#leftMenu")) leftItems.forEach((li)=>li.classList.remove("active")); });
 
-    switch (data) {
-      case "poem": animatePoem(); break;
-      case "locations": showLocation(); break;
-      case "soundtracks": showSoundtrack(); break;
-      case "inspiration": showInspiration(); break;
-      case "graphic": showGraphic(); break;
-      case "archives": showArchives(); break;
-      case "zine": showZine(); break;
-    }
+  leftMenu.addEventListener("click",(e)=>{
+    const menuItemOrSub=e.target.closest(".menu-item,.submenu-item"); if(!menuItemOrSub) return; e.stopPropagation();
+    if(menuItemOrSub.classList.contains("menu-item") && menuItemOrSub.dataset.target==="winter2005"){ toggleSubmenuFor(menuItemOrSub); return; }
+    const data=menuItemOrSub.dataset.target; if(!data) return; if(isPlaying)return;
+    leftItems.forEach((li)=>li.classList.remove("active")); clearTextCenter(); poemContainer.innerHTML=""; archiveContainer.innerHTML="";
+    switch(data){ case"poem": animatePoem(); break; case"locations": showLocation(); break; case"soundtracks": showSoundtrack(); break; case"inspiration": showInspiration(); break; case"graphic": showGraphic(); break; case"archives": showArchives(); break; case"zine": showZine(); break; }
   });
 });
-
 
 document.addEventListener('DOMContentLoaded', () => {
   const introScreen = document.getElementById('introScreen');
@@ -283,15 +216,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextBtn = document.getElementById('nextBtn');
   const trackTitle = document.getElementById('trackTitle');
 
+  // Track
   const tracks = [
-    { el: document.getElementById('track1'), title: 'Remina – Omori' }
+    { el: document.getElementById('track1'), title: 'Remina' }
   ];
   let currentTrackIndex = 0;
   let fadeInterval = null;
 
   const getCurrentTrack = () => tracks[currentTrackIndex].el;
 
-
+  /* ---------- Intro ---------- */
   function openSite() {
     document.querySelector('.enter-text').style.opacity = 0;
     setTimeout(() => {
@@ -304,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
   introScreen.addEventListener('click', openSite);
   introScreen.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') openSite(); });
 
- 
+  /* ---------- Fade Functions ---------- */
   function fadeIn(audio, duration = 2000) {
     clearInterval(fadeInterval);
     audio.pause();
@@ -334,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, stepTime);
   }
 
+  /* ---------- Player Buttons ---------- */
   playPauseBtn.addEventListener('click', () => {
     const track = getCurrentTrack();
     if (track.paused) {
