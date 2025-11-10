@@ -8,12 +8,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const poemContainer = document.getElementById("poemContainer");
   const textCenter = document.getElementById("textCenter");
   const archiveContainer = document.getElementById("archiveContainer");
-  const audio = document.getElementById("soundtrackAudio");
+  const audio = document.getElementById("track1");
+  const musicPlayer = document.getElementById('musicPlayer');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const trackTitle = document.getElementById('trackTitle');
 
   let isPlaying = false;
   let timeouts = [];
 
-  /* ---------- Intro ---------- */
   function openSite() {
     enterText.style.opacity = "0";
     setTimeout(() => {
@@ -25,7 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => it.classList.add("visible"), 380 + i * 120)
       );
     }, 700);
+    setTimeout(() => musicPlayer.classList.add('visible'), 900);
   }
+
   introScreen.addEventListener("click", openSite);
   introScreen.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -34,36 +40,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------- Text Center ---------- */
   function clearTextCenter() {
     textCenter.style.opacity = 0;
     timeouts.forEach(clearTimeout);
     timeouts = [];
   }
+
   function showTextCenter(text, duration = 4500) {
     clearTextCenter();
     textCenter.textContent = text;
     textCenter.style.opacity = 1;
-    const t = setTimeout(() => {
-      textCenter.style.opacity = 0;
-    }, duration);
+    const t = setTimeout(() => { textCenter.style.opacity = 0; }, duration);
     timeouts.push(t);
   }
 
-  /* ---------- Audio Fade ---------- */
-  function fadeAudio(volumeStart, volumeEnd, duration) {
+  function fadeAudio(audioElement, from, to, duration = 1500, callback) {
     const stepTime = 50;
     const steps = Math.max(1, Math.round(duration / stepTime));
     let currentStep = 0;
-    const volumeStep = (volumeEnd - volumeStart) / steps;
-    const fade = setInterval(() => {
+    const volumeStep = (to - from) / steps;
+    audioElement.volume = from;
+    const fadeInterval = setInterval(() => {
       currentStep++;
-      audio.volume = Math.min(1, Math.max(0, volumeStart + volumeStep * currentStep));
-      if (currentStep >= steps) clearInterval(fade);
+      audioElement.volume = Math.min(1, Math.max(0, from + volumeStep * currentStep));
+      if (currentStep >= steps) {
+        clearInterval(fadeInterval);
+        if (callback) callback();
+      }
     }, stepTime);
   }
 
-  /* ---------- Poem ---------- */
   const poemText = `
 I dont know what's wrong between us.
 But everyday feels like a ticking time bomb.
@@ -85,7 +91,6 @@ Like how i desire you.`;
     isPlaying = true;
     clearTextCenter();
     poemContainer.innerHTML = "";
-
     const lines = poemText.split("\n").filter(Boolean);
     const activeLines = [];
     const lineGap = 40;
@@ -95,9 +100,7 @@ Like how i desire you.`;
         setTimeout(() => {
           activeLines.forEach((line) => {
             const words = Array.from(line.querySelectorAll("span"));
-            words.forEach((word, idx) => {
-              setTimeout(() => { word.style.opacity = "0"; }, idx * 150);
-            });
+            words.forEach((word, idx) => { setTimeout(() => { word.style.opacity = "0"; }, idx * 150); });
             setTimeout(() => line.remove(), words.length * 150 + 2400);
           });
           isPlaying = false;
@@ -137,150 +140,64 @@ Like how i desire you.`;
       if (activeLines.length > 3) {
         const oldLine = activeLines.shift();
         const oldWords = Array.from(oldLine.querySelectorAll("span"));
-        oldWords.forEach((word, idx) => {
-          setTimeout(() => { word.style.opacity = "0"; }, idx * 150);
-        });
+        oldWords.forEach((word, idx) => { setTimeout(() => { word.style.opacity = "0"; }, idx * 150); });
         setTimeout(() => oldLine.remove(), oldWords.length * 150 + 2400);
       }
 
       const delay = words.length * 220 + 1200;
       setTimeout(() => showLine(i + 1), delay);
     }
+
     showLine(0);
   }
 
-  /* ---------- Other Sections ---------- */
-  function showLocation() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Netherlands, Delft. 10/21/2025."); setTimeout(()=>isPlaying=false,4500);}
-  function showSoundtrack() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Remina — Omori",7000); audio.currentTime=0; audio.volume=0; const playPromise=audio.play(); if(playPromise&&typeof playPromise.catch==="function") playPromise.catch(()=>{}); fadeAudio(0,1,1500); setTimeout(()=>{ fadeAudio(1,0,1500); setTimeout(()=>{try{audio.pause();}catch(e){} isPlaying=false; },1500);},7000);}
-  function showInspiration() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("My inspiration is hedi slimane."); setTimeout(()=>isPlaying=false,4500);}
+  function showLocation() { if (isPlaying) return; isPlaying=true; clearTextCenter(); showTextCenter("Netherlands, Delft. 10/21/2025."); setTimeout(()=>isPlaying=false,4500); }
+  function showSoundtrack() { if (isPlaying) return; isPlaying=true; clearTextCenter(); showTextCenter("Remina — Omori",7000); audio.currentTime=0; fadeAudio(audio,0,1,1500); audio.play().catch(()=>{}); setTimeout(()=>{ fadeAudio(audio,1,0,1500,()=>{ try{audio.pause()}catch(e){} isPlaying=false }); },7000); }
+  function showInspiration() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("My inspiration is y̶̤̳͈̬̺͉̪̓̀̔̆ò̵̡̳̟̰̩̦͔͖͕͉̫̼͓͇̭̑̂̈̃̎̀̽̿̓̄̃͊̈͋̊̄͂͐̕ŭ̴̧͔̥̙͕̼̬̪͖͍̲."); setTimeout(()=>isPlaying=false,4500);}
   function showGraphic() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Working on it."); setTimeout(()=>isPlaying=false,4500);}
-  function showZine() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Made by me. Inspired by Dior Homme 2005 Winter."); setTimeout(()=>isPlaying=false,4500);}
+  function showZine() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("Made by me. For you."); setTimeout(()=>isPlaying=false,4500);}
 
-  /* ---------- Archives ---------- */
-/* ---------- Archives ---------- */
-const archiveImages = [
-  "images/rick owens furniture.jpg",
-  "images/rick owens furniture 2.jpg",
-  "images/rick owens exhibition.jpg",
-  "images/rick owens exhibition 2.jpg",
-  "images/maison margiela exhibition.jpg"
-];
+  const archiveImages = [
+    "images/basil something.gif",
+    "images/mari.gif",
+    "images/mari something.gif",
+    "images/mewo.gif",
+    "images/basil.gif"
+  ];
 
-function showArchives() {
-  if(isPlaying) return;
-  isPlaying = true;
-  clearTextCenter();
-  poemContainer.innerHTML = "";
-  archiveContainer.innerHTML = "";
+  function showArchives() {
+    if (isPlaying) return; isPlaying=true; clearTextCenter(); poemContainer.innerHTML=''; archiveContainer.innerHTML='';
+    archiveImages.forEach((src,i)=>{
+      const div=document.createElement("div");
+      div.classList.add("archive-item"); const sizes=["small","medium","large"];
+      div.classList.add(sizes[Math.floor(Math.random()*sizes.length)]);
+      const img=document.createElement("img"); img.src=src; div.appendChild(img); archiveContainer.appendChild(div);
+      setTimeout(()=>{div.style.opacity='1'; div.style.transform='translateY(0)';},i*200);
+    });
+    setTimeout(()=>{isPlaying=false},archiveImages.length*200+1000);
+  }
 
-  archiveImages.forEach((src, i) => {
-    const div = document.createElement("div");
-    div.classList.add("archive-item");
-    const img = document.createElement("img");
-    img.src = src;
-    div.appendChild(img);
-    archiveContainer.appendChild(div);
-
-    setTimeout(() => {
-      div.style.opacity = "1";
-      div.style.transform = "translateY(0)";
-    }, i * 200);
-  });
-
-  // Reset isPlaying after last animation
-  const totalTime = archiveImages.length * 200 + 1000;
-  setTimeout(() => isPlaying = false, totalTime);
-}
-
-
-  /* ---------- Menu ---------- */
-  function toggleSubmenuFor(targetMenuItem){ leftItems.forEach((li)=>{if(li!==targetMenuItem) li.classList.remove("active");}); targetMenuItem.classList.toggle("active"); }
-
-  document.addEventListener("click",(e)=>{ if(!e.target.closest("#leftMenu")) leftItems.forEach((li)=>li.classList.remove("active")); });
+  function toggleSubmenuFor(targetMenuItem){ leftItems.forEach(li=>{if(li!==targetMenuItem)li.classList.remove('active');}); targetMenuItem.classList.toggle('active'); }
+  document.addEventListener("click",(e)=>{ if(!e.target.closest("#leftMenu")) leftItems.forEach(li=>li.classList.remove('active')); });
 
   leftMenu.addEventListener("click",(e)=>{
-    const menuItemOrSub=e.target.closest(".menu-item,.submenu-item"); if(!menuItemOrSub) return; e.stopPropagation();
+    const menuItemOrSub=e.target.closest(".menu-item,.submenu-item"); if(!menuItemOrSub)return; e.stopPropagation();
     if(menuItemOrSub.classList.contains("menu-item") && menuItemOrSub.dataset.target==="winter2005"){ toggleSubmenuFor(menuItemOrSub); return; }
-    const data=menuItemOrSub.dataset.target; if(!data) return; if(isPlaying)return;
-    leftItems.forEach((li)=>li.classList.remove("active")); clearTextCenter(); poemContainer.innerHTML=""; archiveContainer.innerHTML="";
-    switch(data){ case"poem": animatePoem(); break; case"locations": showLocation(); break; case"soundtracks": showSoundtrack(); break; case"inspiration": showInspiration(); break; case"graphic": showGraphic(); break; case"archives": showArchives(); break; case"zine": showZine(); break; }
+    const data=menuItemOrSub.dataset.target; if(!data || isPlaying) return;
+    leftItems.forEach(li=>li.classList.remove('active')); clearTextCenter(); poemContainer.innerHTML=''; archiveContainer.innerHTML='';
+    switch(data){ case "poem": animatePoem(); break; case "locations": showLocation(); break; case "soundtracks": showSoundtrack(); break; case "inspiration": showInspiration(); break; case "graphic": showGraphic(); break; case "archives": showArchives(); break; case "zine": showZine(); break; }
   });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-  const introScreen = document.getElementById('introScreen');
-  const menuItems = document.querySelectorAll('.menu-item');
-  const musicPlayer = document.getElementById('musicPlayer');
-  const playPauseBtn = document.getElementById('playPauseBtn');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const trackTitle = document.getElementById('trackTitle');
-
-  // Track
-  const tracks = [
-    { el: document.getElementById('track1'), title: 'Remina' }
-  ];
-  let currentTrackIndex = 0;
-  let fadeInterval = null;
-
-  const getCurrentTrack = () => tracks[currentTrackIndex].el;
-
-  /* ---------- Intro ---------- */
-  function openSite() {
-    document.querySelector('.enter-text').style.opacity = 0;
-    setTimeout(() => {
-      introScreen.style.display = 'none';
-      menuItems.forEach((item, i) => setTimeout(() => item.classList.add('visible'), i * 100));
-    }, 700);
-
-    setTimeout(() => musicPlayer.classList.add('visible'), 900);
-  }
-  introScreen.addEventListener('click', openSite);
-  introScreen.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') openSite(); });
-
-  /* ---------- Fade Functions ---------- */
-  function fadeIn(audio, duration = 2000) {
-    clearInterval(fadeInterval);
-    audio.pause();
-    audio.currentTime = 0;
-    audio.volume = 0;
-    const stepTime = 50;
-    const steps = duration / stepTime;
-    let currentStep = 0;
-    audio.play().catch(() => {});
-    fadeInterval = setInterval(() => {
-      currentStep++;
-      audio.volume = Math.min(1, currentStep / steps);
-      if (currentStep >= steps) clearInterval(fadeInterval);
-    }, stepTime);
-  }
-
-  function fadeOut(audio, duration = 1500) {
-    clearInterval(fadeInterval);
-    const stepTime = 50;
-    const steps = duration / stepTime;
-    let currentStep = 0;
-    const startVolume = audio.volume;
-    fadeInterval = setInterval(() => {
-      currentStep++;
-      audio.volume = Math.max(0, startVolume * (1 - currentStep / steps));
-      if (currentStep >= steps) { audio.pause(); audio.volume = 1; clearInterval(fadeInterval); }
-    }, stepTime);
-  }
-
-  /* ---------- Player Buttons ---------- */
-  playPauseBtn.addEventListener('click', () => {
-    const track = getCurrentTrack();
-    if (track.paused) {
-      fadeIn(track);
-      playPauseBtn.textContent = 'pause';
-      trackTitle.textContent = 'now playing: ' + tracks[currentTrackIndex].title;
+  playPauseBtn.addEventListener('click',()=>{
+    if(audio.paused){
+      audio.currentTime = 0;
+      audio.play().catch(()=>{});
+      fadeAudio(audio, 0, 1, 1500);
+      playPauseBtn.textContent='pause';
+      trackTitle.textContent='now playing: Remina';
     } else {
-      fadeOut(track);
-      playPauseBtn.textContent = 'play';
+      fadeAudio(audio, audio.volume, 0, 1500, ()=>audio.pause());
+      playPauseBtn.textContent='play';
     }
   });
-
-  nextBtn.addEventListener('click', () => fadeIn(getCurrentTrack()));
-  prevBtn.addEventListener('click', () => fadeIn(getCurrentTrack()));
 });
