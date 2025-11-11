@@ -202,7 +202,7 @@ body {
   .right-menu { right: 12px; top: 12px; bottom: auto; width: 140px; text-align:right; }
 
   /* poem lower on mobile */
-  .poem-wrap { top: 80px; width: 90%; }
+  .poem-wrap { top: 20px; width: 90%; }
   .poem-word { font-size: 10px; margin-right: 8px; }
 
   .archive-wrap { gap: 12px; width: 95%; }
