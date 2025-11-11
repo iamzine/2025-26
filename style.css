@@ -1,3 +1,6 @@
+/* ======================== */
+/*      GLOBAL STYLES       */
+/* ======================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 body {
@@ -9,6 +12,7 @@ body {
   overflow-x: hidden;
 }
 
+/* INTRO SCREEN */
 .intro-screen {
   position: fixed; inset: 0;
   display: flex; align-items: center; justify-content: center;
@@ -24,12 +28,10 @@ body {
   transition: opacity 0.9s ease;
 }
 
+/* MENUS */
 .menu { position: fixed; z-index: 40; pointer-events: none; }
-
-/* DESKTOP: menus at bottom */
 .left-menu { bottom: 18px; left: 18px; width: 230px; }
 .right-menu { bottom: 18px; right: 18px; width: 260px; text-align: right; }
-
 .menu ul { list-style: none; }
 
 .menu-item {
@@ -61,10 +63,7 @@ body {
   list-style: none;
   margin-left: 12px;
 }
-.menu-item.active > .submenu {
-  opacity: 1;
-  pointer-events: auto;
-}
+.menu-item.active > .submenu { opacity: 1; pointer-events: auto; }
 .submenu-item {
   font-size: 12px;
   color: rgba(0,0,0,0.12);
@@ -74,6 +73,7 @@ body {
 }
 .submenu-item:hover { color: rgba(0,0,0,1); }
 
+/* CENTER TEXT */
 #textCenter {
   position: fixed;
   top: 50%;
@@ -87,9 +87,12 @@ body {
   transition: opacity 1.5s ease;
 }
 
+/* ======================== */
+/*      POEM STYLES         */
+/* ======================== */
 .poem-wrap {
   position: fixed;
-  top: 20%;
+  top: 20%; /* desktop start */
   left: 50%;
   width: 600px;
   transform: translate(-50%, -50%);
@@ -123,7 +126,9 @@ body {
   transition: transform 2.6s cubic-bezier(.22,.68,.11,1), opacity 2.4s ease, color 2.4s ease;
 }
 
-/* Archive Styles */
+/* ======================== */
+/*     ARCHIVES & MUSIC     */
+/* ======================== */
 .archive-wrap {
   position: fixed;
   top: 50%;
@@ -152,16 +157,9 @@ body {
 .archive-item.small { max-width: 180px; }
 .archive-item.medium { max-width: 280px; }
 .archive-item.large { max-width: 380px; }
-.archive-item img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  transition: transform 0.6s ease;
-}
+.archive-item img { display: block; width: 100%; height: auto; object-fit: cover; transition: transform 0.6s ease; }
 .archive-item:hover img { transform: scale(1.05); }
 
-/* Music Player */
 .music-player {
   position: fixed;
   left: 50%;
@@ -175,7 +173,7 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   pointer-events: auto;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255,255,255,0.05);
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 4px;
   padding: 6px 14px;
@@ -183,40 +181,14 @@ body {
   z-index: 45;
   white-space: normal;
 }
+.music-player.visible { transform: translateX(-50%) translateY(0); opacity: 1; }
+.music-player button { cursor: pointer; background: none; border: none; color: rgba(0,0,0,0.35); padding: 4px 8px; font-size: 11px; font-weight:700; text-transform: uppercase; letter-spacing:1px; transition: color 0.3s ease; }
+.music-player button:hover { color: rgba(0,0,0,1); }
+#trackTitle { color: rgba(0,0,0,0.5); font-weight:700; font-size:11px; letter-spacing:1px; overflow: visible; text-overflow: clip; white-space: nowrap; }
 
-.music-player.visible {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-.music-player button {
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: rgba(0, 0, 0, 0.35);
-  padding: 4px 8px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: color 0.3s ease;
-}
-
-.music-player button:hover {
-  color: rgba(0, 0, 0, 1);
-}
-
-#trackTitle {
-  color: rgba(0,0,0,0.5);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 1px;
-  overflow: visible;
-  text-overflow: clip;
-  white-space: nowrap; /* force single line */
-}
-
-/* Responsive */
+/* ======================== */
+/*      RESPONSIVE          */
+/* ======================== */
 @media(max-width:1024px){
   .poem-wrap { width: 90%; top: 28%; }
   .archive-item.small { max-width: 140px; }
@@ -225,16 +197,19 @@ body {
 }
 
 @media(max-width:700px){
-  /* MOBILE: menus move to top */
+  /* menus move to top */
   .left-menu { left: 12px; top: 12px; bottom: auto; width: 140px; }
   .right-menu { right: 12px; top: 12px; bottom: auto; width: 140px; text-align:right; }
 
-  .poem-wrap { width: 90%; top: 25%; }
+  /* poem lower on mobile */
+  .poem-wrap { top: 80px; width: 90%; }
   .poem-word { font-size: 10px; margin-right: 8px; }
+
   .archive-wrap { gap: 12px; width: 95%; }
   .archive-item.small { max-width: 100px; }
   .archive-item.medium { max-width: 160px; }
   .archive-item.large { max-width: 220px; }
+
   .music-player { bottom: 12px; padding: 5px 12px; font-size: 10px; gap: 6px; }
   .music-player button { font-size: 10px; padding: 3px 6px; }
   #trackTitle { font-size: 10px; max-width: 90px; }
