@@ -9,7 +9,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Intro */
 .intro-screen {
   position: fixed; inset: 0;
   display: flex; align-items: center; justify-content: center;
@@ -25,23 +24,9 @@ body {
   transition: opacity 0.9s ease;
 }
 
-/* === MENU === */
-.menu {
-  position: fixed;
-  z-index: 40;
-  pointer-events: none;
-}
-.left-menu {
-  bottom: 18px;
-  left: 18px;
-  width: 230px;
-}
-.right-menu {
-  bottom: 18px;
-  right: 18px;
-  width: 260px;
-  text-align: right;
-}
+.menu { position: fixed; z-index: 40; pointer-events: none; }
+.left-menu { top: 18px; left: 18px; width: 230px; }
+.right-menu { top: 18px; right: 18px; width: 260px; text-align: right; }
 .menu ul { list-style: none; }
 
 .menu-item {
@@ -86,7 +71,6 @@ body {
 }
 .submenu-item:hover { color: rgba(0,0,0,1); }
 
-/* === CENTER TEXT === */
 #textCenter {
   position: fixed;
   top: 50%;
@@ -100,7 +84,6 @@ body {
   transition: opacity 1.5s ease;
 }
 
-/* === POEM === */
 .poem-wrap {
   position: fixed;
   top: 30%;
@@ -137,7 +120,7 @@ body {
   transition: transform 2.6s cubic-bezier(.22,.68,.11,1), opacity 2.4s ease, color 2.4s ease;
 }
 
-/* === ARCHIVE === */
+/* Archive Styles */
 .archive-wrap {
   position: fixed;
   top: 50%;
@@ -175,7 +158,7 @@ body {
 }
 .archive-item:hover img { transform: scale(1.05); }
 
-/* === MUSIC PLAYER === */
+/* Music Player */
 .music-player {
   position: fixed;
   left: 50%;
@@ -195,10 +178,8 @@ body {
   padding: 6px 14px;
   transition: transform 0.52s cubic-bezier(.22,.9,.32,1), opacity 0.42s ease;
   z-index: 45;
-  white-space: nowrap;
-  overflow-x: auto;
+  white-space: normal;
 }
-.music-player::-webkit-scrollbar { display: none; }
 
 .music-player.visible {
   transform: translateX(-50%) translateY(0);
@@ -217,18 +198,22 @@ body {
   letter-spacing: 1px;
   transition: color 0.3s ease;
 }
-.music-player button:hover { color: rgba(0, 0, 0, 1); }
+
+.music-player button:hover {
+  color: rgba(0, 0, 0, 1);
+}
 
 #trackTitle {
   color: rgba(0,0,0,0.5);
   font-weight: 700;
   font-size: 11px;
   letter-spacing: 1px;
-  white-space: nowrap;
   overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap; /* force single line */
 }
 
-/* === RESPONSIVE === */
+/* Responsive */
 @media(max-width:1024px){
   .poem-wrap { width: 90%; top: 28%; }
   .archive-item.small { max-width: 140px; }
@@ -237,17 +222,26 @@ body {
 }
 
 @media(max-width:700px){
-  /* move menus to top on mobile */
-  .left-menu { top: 12px; bottom: auto; left: 12px; width: 140px; }
-  .right-menu { top: 12px; bottom: auto; right: 12px; width: 140px; text-align:right; }
+  .left-menu { left: 12px; top: 12px; width: 140px; }
+  .right-menu { right: 12px; top: 12px; width: 140px; text-align:right; }
 
-  .poem-wrap { width: 90%; top: 25%; }
-  .poem-word { font-size: 10px; margin-right: 8px; }
+  /* Poem adjustments for iPhone */
+  .poem-wrap {
+    position: relative;      
+    top: auto;               
+    margin-top: 80px;        
+    width: 90%;
+    line-height: 1.4;        
+  }
+  .poem-line { position: relative; top: auto; }
+  .poem-word { font-size: 9px; margin-right: 6px; }
+
   .archive-wrap { gap: 12px; width: 95%; }
   .archive-item.small { max-width: 100px; }
   .archive-item.medium { max-width: 160px; }
   .archive-item.large { max-width: 220px; }
+
   .music-player { bottom: 12px; padding: 5px 12px; font-size: 10px; gap: 6px; }
   .music-player button { font-size: 10px; padding: 3px 6px; }
-  #trackTitle { font-size: 10px; max-width: 100%; }
+  #trackTitle { font-size: 10px; max-width: 90px; }
 }

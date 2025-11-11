@@ -93,7 +93,7 @@ Like how i desire you.`;
     poemContainer.innerHTML = "";
     const lines = poemText.split("\n").filter(Boolean);
     const activeLines = [];
-    const lineGap = 40;
+    const lineGap = window.innerWidth <= 700 ? 18 : 40;
 
     function showLine(i) {
       if (i >= lines.length) {
@@ -111,7 +111,7 @@ Like how i desire you.`;
       const text = lines[i].trim();
       const line = document.createElement("div");
       line.className = "poem-line";
-      line.style.top = `${i * lineGap}px`;
+      if(window.innerWidth > 700) line.style.top = `${i * lineGap}px`;
       poemContainer.appendChild(line);
       activeLines.push(line);
 
@@ -151,6 +151,7 @@ Like how i desire you.`;
     showLine(0);
   }
 
+  // Other menu actions
   function showLocation() { if (isPlaying) return; isPlaying=true; clearTextCenter(); showTextCenter("Netherlands, Delft. 10/21/2025."); setTimeout(()=>isPlaying=false,4500); }
   function showSoundtrack() { if (isPlaying) return; isPlaying=true; clearTextCenter(); showTextCenter("Remina — Omori",7000); audio.currentTime=0; fadeAudio(audio,0,1,1500); audio.play().catch(()=>{}); setTimeout(()=>{ fadeAudio(audio,1,0,1500,()=>{ try{audio.pause()}catch(e){} isPlaying=false }); },7000); }
   function showInspiration() { if(isPlaying)return; isPlaying=true; clearTextCenter(); showTextCenter("My inspiration is y̶̤̳͈̬̺͉̪̓̀̔̆ò̵̡̳̟̰̩̦͔͖͕͉̫̼͓͇̭̑̂̈̃̎̀̽̿̓̄̃͊̈͋̊̄͂͐̕ŭ̴̧͔̥̙͕̼̬̪͖͍̲."); setTimeout(()=>isPlaying=false,4500);}
